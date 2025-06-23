@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>INMAS Test Requisition Form</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 10mm;
+      font-size: 12px;
+      color: #000;
+    }
+
+    .header {
+      text-align: center;
+      border: 1px solid black;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+
+    .header img {
+      height: 40px;
+      margin-bottom: 5px;
+    }
+
+    .info-section {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 3px 10px;
+      margin-bottom: 10px;
+    }
+
+    .info-section label {
+      font-weight: bold;
+    }
+
+    .form-row {
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-weight: bold;
+      font-size: 1em;
+      margin: 15px 0 5px;
+      border-bottom: 1px solid #000;
+      padding-bottom: 2px;
+    }
+
+    .checkboxes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 20px;
+      margin-bottom: 10px;
+    }
+
+    .checkboxes label {
+      display: flex;
+      align-items: center;
+      font-weight: normal;
+      gap: 5px;
+    }
+
+    .flex-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .inline-label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"], input[type="date"], textarea {
+      padding: 4px;
+      width: 220px;
+      font-size: 12px;
+    }
+
+    .stamp-area {
+      margin-top: 40px;
+      text-align: right;
+      font-weight: bold;
+    }
+
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .buttons button {
+      padding: 6px 14px;
+      font-size: 0.9em;
+      cursor: pointer;
+    }
+
+    @media print {
+      .buttons {
+        display: none;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      @page {
+        size: A4;
+        margin: 10mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<form id="requisition-form" action="/submit-requisition/<%= patient._id %>" method="POST">
+  <div class="header">
+    <img src="/images/logo.png" alt="INMAS Logo" />
+    <h3>Institute of Nuclear Medicine & Allied Sciences</h3>
+    <h4>DRDO, Ministry of Defence</h4>
+    <p>Brig SK Mazumdar Road, Delhi-110054<br>Telephone No: 011-23905282</p>
+  </div>
+
+  <div class="info-section">
+    <label>Reg. No:</label><div><%= patient.registrationNo %></div>
+    <label>Clinic No:</label><div>1</div>
+    <label>Name:</label><div><%= patient.name %></div>
+    <label>Age/Sex:</label><div><%= patient.age %> / <%= patient.sex %></div>
+    <label>Mob. No:</label><div><%= patient.contact %></div>
+    <label>Address:</label><div><%= patient.address %></div>
+    <label>Date/Time:</label><div><%= patient.appointmentDate.toLocaleDateString("en-IN") %>, <%= patient.appointmentDate.toLocaleTimeString("en-IN") %></div>
+    <label>Ref. Doctor:</label><div>Dr Rashmi Aggarwal</div>
+  </div>
+
+  <div class="section-title">TESTS REQUESTED</div>
+
+  <div class="flex-group">
+    <div>
+      <strong>BLOOD TESTS</strong>
+      <div class="checkboxes">
+        <label><input type="checkbox" name="tests[]" value="CBC"> CBC</label>
+        <label><input type="checkbox" name="tests[]" value="Blood Sugar"> Blood Sugar - F / PP / R</label>
+        <label><input type="checkbox" name="tests[]" value="LFT"> LFT</label>
+        <label><input type="checkbox" name="tests[]" value="KFT"> KFT</label>
+        <label><input type="checkbox" name="tests[]" value="Lipid Profile"> Lipid Profile</label>
+        <label><input type="checkbox" name="tests[]" value="Thyroid Profile"> Thyroid Profile</label>
+        <label><input type="checkbox" name="tests[]" value="FT3/FT4"> FT3 / FT4</label>
+        <label><input type="checkbox" name="tests[]" value="TPO"> TPO</label>
+      </div>
+    </div>
+
+    <div>
+      <strong>URINE SAMPLES</strong>
+      <div class="checkboxes">
+        <label><input type="checkbox" name="tests[]" value="Urine R/M"> Urine Routine & Microscopy</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-group">
+    <div>
+      <strong>RADIOLOGICAL TESTS</strong>
+      <div class="checkboxes">
+        <label><input type="checkbox" name="tests[]" value="X-ray"> X-ray (Whole / Upper / Lower)</label>
+        <label><input type="checkbox" name="tests[]" value="Ultrasound"> Ultrasound THYROID / Abdomen / Pelvis</label>
+        <div class="inline-label"><input type="checkbox" name="tests[]" value="CT/MRI"> CT / MRI: <input type="text" name="ctDetails" /></div>
+        <div class="inline-label"><input type="checkbox" name="tests[]" value="FNAC"> FNAC: <input type="text" name="fnacDetails" /></div>
+      </div>
+    </div>
+
+    <div>
+      <strong>OTHER TESTS</strong>
+      <div class="checkboxes">
+        <label><input type="checkbox" name="tests[]" value="RA Factor"> RA Factor</label>
+        <label><input type="checkbox" name="tests[]" value="PSA"> PSA</label>
+        <label><input type="checkbox" name="tests[]" value="Blood Group"> Blood Group</label>
+        <label><input type="checkbox" name="tests[]" value="Minerals"> Calcium, Phosphorus, ALP</label>
+        <label><input type="checkbox" name="tests[]" value="Vitamin D"> Vitamin D</label>
+        <label><input type="checkbox" name="tests[]" value="Vitamin B12"> Vitamin B12</label>
+        <label><input type="checkbox" name="tests[]" value="HbA1C"> HbA1C</label>
+        <label><input type="checkbox" name="tests[]" value="PS/ESR/MP"> PS, ESR, MP</label>
+        <label><input type="checkbox" name="tests[]" value="Typhidot"> Typhidot (IgM, IgG)</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <label>Sample Collected By:</label> <input type="text" name="sampleCollector" />
+  </div>
+
+  <div class="stamp-area">
+    Authorized Signature & Hospital Stamp
+  </div>
+
+  <div class="buttons">
+    <button type="submit">Save</button>
+    <button type="button" id="printButton">🖨️ Print</button>
+  </div>
+</form>
+
+<script src="/js/print.js"></script>
+</body>
+</html>

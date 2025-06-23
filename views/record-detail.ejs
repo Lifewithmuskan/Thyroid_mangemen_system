@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Record Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .section-header {
+      background-color: #f8f9fa;
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      border-left: 4px solid #0d6efd;
+    }
+    .info-card {
+      border: 1px solid #dee2e6;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: #ffffff;
+    }
+    .info-item {
+      margin-bottom: 0.5rem;
+    }
+    .label {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+<div class="container py-4">
+  <h3 class="mb-4">📝 Record Detail for <%= patient.name %> (<%= new Date(record.dateRecorded).toLocaleDateString() %>)</h3>
+
+  <!-- Basic Info -->
+  <div class="section-header">Medical Info</div>
+  <div class="info-card row">
+    <div class="col-md-4 info-item"><span class="label">Height:</span> <%= record.height %> cm</div>
+    <div class="col-md-4 info-item"><span class="label">Weight:</span> <%= record.weight %> kg</div>
+    <div class="col-md-4 info-item"><span class="label">BMI:</span> <%= (record.weight / ((record.height/100)**2)).toFixed(1) %></div>
+    <div class="col-md-4 info-item"><span class="label">BP:</span> <%= record.bloodPressure?.systolic %>/<%= record.bloodPressure?.diastolic %> mmHg</div>
+    <div class="col-md-4 info-item"><span class="label">Goiter:</span> <%= record.goiter?.join(", ") || 'None' %></div>
+    <div class="col-md-4 info-item"><span class="label">Thyroid Type:</span> <%= record.thyroidType %></div>
+    <div class="col-md-4 info-item">
+      <span class="label">Thyroid Levels:</span>
+      <ul class="mb-0">
+        <% Object.entries(record.thyroidLevels || {}).forEach(([key, val]) => { %>
+          <% if(val) { %><li><%= key.toUpperCase() %>: <%= val %></li><% } %>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+
+  <% if (otherInvestigation) { %>
+    <!-- Loop Through Sections -->
+    <% const sections = [
+      { title: 'Lipid Profile', data: otherInvestigation.lipidProfile },
+      { title: 'Glucose Levels', data: otherInvestigation.glucoseLevels },
+      { title: 'Kidney Function', data: otherInvestigation.kidneyFunction },
+      { title: 'Liver Function', data: otherInvestigation.liverFunction },
+      { title: 'Minerals', data: otherInvestigation.minerals },
+      { title: 'Serology', data: otherInvestigation.serology },
+      { title: 'Hematology', data: otherInvestigation.hematology },
+      { title: 'RBC Indices', data: otherInvestigation.rbcIndices },
+      { title: 'Urine Examination', data: otherInvestigation.urineExamination },
+    ]; %>
+
+    <% sections.forEach(section => { %>
+      <% const entries = Object.entries(section.data || {}).filter(([_, v]) => v !== null && v !== undefined && v !== '') %>
+      <% if (entries.length > 0) { %>
+        <div class="section-header"><%= section.title %></div>
+        <div class="info-card row">
+          <% entries.forEach(([key, value]) => { %>
+            <div class="col-md-4 info-item">
+              <span class="label"><%= key.charAt(0).toUpperCase() + key.slice(1) %>:</span> <%= value %>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    <% }); %>
+  <% } else { %>
+    <div class="alert alert-info mt-4">No other investigation data found for this visit.</div>
+  <% } %>
+
+  <div class="mt-4">
+    <a href="/patients/<%= patient._id %>" class="btn btn-secondary">← Back to Patient</a>
+  </div>
+</div>
+</body>
+</html>

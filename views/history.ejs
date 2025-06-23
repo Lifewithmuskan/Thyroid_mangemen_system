@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient History - Thyroid Department</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Adjust layout assuming a 250px left sidebar */
+        .main-content {
+            margin-left: 250px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 1100px;
+        }
+    </style>
+</head>
+<body>
+    <%- include('partials/navbar') %>
+
+    <div class="container mt-4 main-content">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h4>📅 Patient History & Records</h4>
+            </div>
+            <div class="card-body">
+                <!-- Filters -->
+                <form method="GET" action="/history" class="mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="dateFilter" class="form-label">Date Filter</label>
+                            <select class="form-select" id="dateFilter" name="dateFilter">
+                                <option value="">All Time</option>
+                                <option value="7days" <%= filters.dateFilter === '7days' ? 'selected' : '' %>>Last 7 Days</option>
+                                <option value="1month" <%= filters.dateFilter === '1month' ? 'selected' : '' %>>Last 1 Month</option>
+                                <option value="1year" <%= filters.dateFilter === '1year' ? 'selected' : '' %>>Last 1 Year</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="thyroidType" class="form-label">Thyroid Type</label>
+                            <select class="form-select" id="thyroidType" name="thyroidType">
+                                <option value="all">All Types</option>
+                                <option value="Normal" <%= filters.thyroidType === 'Normal' ? 'selected' : '' %>>Normal</option>
+                                <option value="Hypothyroid" <%= filters.thyroidType === 'Hypothyroid' ? 'selected' : '' %>>Hypothyroid</option>
+                                <option value="Hyperthyroid" <%= filters.thyroidType === 'Hyperthyroid' ? 'selected' : '' %>>Hyperthyroid</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">Apply Filters</button>
+                            <a href="/history" class="btn btn-outline-secondary">Clear</a>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Results -->
+                <% if (medicalRecords.length === 0) { %>
+                    <div class="text-center py-5">
+                        <h5>No medical records found</h5>
+                        <p class="text-muted">Try adjusting your filters or add some medical records</p>
+                        <a href="/information" class="btn btn-primary">Add Medical Record</a>
+                    </div>
+                <% } else { %>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Patient</th>
+                                    <th>Age</th>
+                                    <th>Diagnosis</th>
+                                    <th>Thyroid Type</th>
+                                    <th>T3/T4/TSH</th>
+                                    <th>BP</th>
+                                    <th>BMI</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% medicalRecords.forEach(record => { %>
+                                    <tr>
+                                        <td><%= new Date(record.dateRecorded).toLocaleDateString() %></td>
+                                        <td><%= record.patient.name %></td>
+                                        <td><%= record.patient.age %></td>
+                                        <td>
+                                            <span class="text-truncate d-inline-block" style="max-width: 150px;" title="<%= record.currentDiagnosis %>">
+                                                <%= record.currentDiagnosis %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <% if (record.thyroidType === 'Normal') { %>
+                                                <span class="badge bg-success"><%= record.thyroidType %></span>
+                                            <% } else if (record.thyroidType === 'Hypothyroid') { %>
+                                                <span class="badge bg-warning"><%= record.thyroidType %></span>
+                                            <% } else if (record.thyroidType === 'Hyperthyroid') { %>
+                                                <span class="badge bg-danger"><%= record.thyroidType %></span>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <small>
+                                                T3: <%= record.thyroidLevels.t3 %><br>
+                                                T4: <%= record.thyroidLevels.t4 %><br>
+                                                TSH: <%= record.thyroidLevels.tsh %>
+                                            </small>
+                                        </td>
+                                        <td><%= record.bloodPressure.upper %>/<%= record.bloodPressure.lower %></td>
+                                        <td>
+                                            <% 
+                                                const heightInM = record.height / 100;
+                                                const bmi = (record.weight / (heightInM * heightInM)).toFixed(1);
+                                            %>
+                                            <%= bmi %>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-3">
+                        <p class="text-muted">
+                            Showing <%= medicalRecords.length %> record(s)
+                        </p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export Data - Thyroid Department</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/navbar') %>
+    
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-success text-white">
+                        <h4>📊 Export Patient Data</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Export patient data and medical records for reporting and analysis.</p>
+                        
+                        <form action="/export" method="POST">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="exportType" class="form-label">Export Type</label>
+                                        <select class="form-select" id="exportType" name="exportType" required>
+                                            <option value="">Select export type...</option>
+                                            <option value="patients">Patients Only</option>
+                                            <option value="medical">Medical Records Only</option>
+                                            <option value="complete">Complete Data</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="format" class="form-label">Format</label>
+                                        <select class="form-select" id="format" name="format" required>
+                                            <option value="">Select format...</option>
+                                            <option value="csv">CSV</option>
+                                            <option value="json">JSON</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="startDate" class="form-label">Start Date (Optional)</label>
+                                        <input type="date" class="form-control" id="startDate" name="startDate">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="endDate" class="form-label">End Date (Optional)</label>
+                                        <input type="date" class="form-control" id="endDate" name="endDate">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="thyroidFilter" class="form-label">Thyroid Type Filter (Optional)</label>
+                                <select class="form-select" id="thyroidFilter" name="thyroidFilter">
+                                    <option value="">All Types</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Hypothyroid">Hypothyroid</option>
+                                    <option value="Hyperthyroid">Hyperthyroid</option>
+                                </select>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/home" class="btn btn-secondary me-md-2">Cancel</a>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-download"></i> Export Data
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="alert alert-info">
+                            <h6>Export Information:</h6>
+                            <ul class="mb-0">
+                                <li><strong>Patients Only:</strong> Basic patient information</li>
+                                <li><strong>Medical Records Only:</strong> Diagnosis and test results</li>
+                                <li><strong>Complete Data:</strong> All patient and medical information</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register Patient - ThyroidCare</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow-x: hidden;
+      background-color: #f8f9fa;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      background-color: #000; /* black */
+      color: white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 30px 20px;
+    }
+
+    .sidebar h4 {
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 40px 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-wrapper {
+      width: 100%;
+      max-width: 850px;
+    }
+
+    .card-header {
+      background-color: #000 !important;
+    }
+
+    .btn-black {
+      background-color: black;
+      color: white;
+      border: none;
+    }
+
+    .btn-black:hover {
+      background-color: #333;
+    }
+
+    .nav-link {
+      font-size: 16px;
+      padding: 8px 0;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+      .main-content {
+        margin-left: 0;
+        padding: 20px;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h4>🏥 Thyroid Dept</h4>
+    <hr style="border-color: white;">
+    <ul class="nav flex-column">
+      <li class="nav-item"><a class="nav-link text-white" href="/home">Dashboard</a></li>
+      <li class="nav-item"><a class="nav-link text-white" href="/register">Register Patient</a></li>
+      <li class="nav-item"><a class="nav-link text-white" href="/patients">All Patients</a></li>
+      <li class="nav-item"><a class="nav-link text-white" href="/logout">Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="form-wrapper">
+      <div class="card shadow border-0">
+        <div class="card-header">
+          <h5 class="mb-0 text-white">➕ Register Patient</h5>
+        </div>
+        <div class="card-body">
+
+          <!-- Buttons to select user type -->
+          <div class="mb-4 d-flex justify-content-center gap-3">
+            <button id="newUserBtn" class="btn btn-dark">New User</button>
+<button id="existingUserBtn" class="btn btn-secondary">Existing User</button>
+
+          </div>
+
+          <!-- Registration Number Search -->
+          <div id="searchSection" style="display: none;" class="mb-4">
+            <label for="searchRegNo" class="form-label">Enter Registration Number</label>
+            <input type="text" class="form-control" id="searchRegNo" placeholder="Enter Reg. No & press Enter" onkeydown="searchExisting(event)">
+          </div>
+
+          <% if (success) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <%= success %>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <script>
+              setTimeout(() => {
+                window.location.href = "/home";
+              }, 2000);
+            </script>
+          <% } %>
+
+          <% if (error) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <%= error %>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          <% } %>
+
+          <!-- Patient Form -->
+          <div id="formSection" style="display: none;">
+            <form action="/register" method="POST">
+              <div class="mb-3">
+                <label for="regNo" class="form-label">Registration Number</label>
+                <input type="text" class="form-control" id="regNo" name="regNo" required>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="name" class="form-label">Full Name *</label>
+                  <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="age" class="form-label">Age *</label>
+                  <input type="number" class="form-control" id="age" name="age" min="0" max="150" required>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="sex" class="form-label">Sex *</label>
+                  <select class="form-select" id="sex" name="sex" required>
+                    <option value="">Select Sex</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="contact" class="form-label">Contact Number *</label>
+                  <input type="tel" class="form-control" id="contact" name="contact" required>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="address" class="form-label">Address *</label>
+                <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+              </div>
+
+              <div class="mb-3">
+                <label for="aadharNo" class="form-label">Aadhar Number *</label>
+                <input type="text" class="form-control" id="aadharNo" name="aadharNo" required pattern="\d{12}" title="Enter a valid 12-digit Aadhar number">
+              </div>
+
+              <div class="mb-3">
+                <label for="numberOfVisits" class="form-label">Number of Visits</label>
+                <input type="number" class="form-control" id="numberOfVisits" name="numberOfVisits" readonly value="1">
+              </div>
+
+              <div class="mb-4">
+                <label for="appointmentDate" class="form-label">Appointment Date *</label>
+                <input type="datetime-local" class="form-control" id="appointmentDate" name="appointmentDate" required>
+              </div>
+
+              <div class="d-flex justify-content-between">
+                <a href="/home" class="btn btn-outline-secondary">← Back to Dashboard</a>
+                <button type="submit" class="btn btn-black">Save</button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+ 
+
+</body>
+<!-- Place this just before </body> -->
+<script src="/js/register.js"></script>
+
+
+
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Enter Diagnosis - Thyroid Department</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/style.css"/>
+  <style>
+    .main-content {
+      margin-left: 250px;
+      display: flex;
+      justify-content: center;
+    }
+    .card {
+      width: 100%;
+      max-width: 900px;
+    }
+    .bg-dark {
+      background-color: #000 !important;
+    }
+    .container {
+      background-color: aliceblue;
+    }
+    .form-check {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <div class="container mt-4 main-content">
+    <div class="card shadow">
+      <div class="card-header bg-dark text-white">
+        <h4 class="mb-0">🩺 Enter Diagnosis Information</h4>
+      </div>
+      <div class="card-body">
+        <% if (success) { %>
+          <div class="alert alert-success"><%= success %></div>
+        <% } %>
+        <% if (error) { %>
+          <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+
+        <form action="/information" method="POST">
+
+          <!-- Patient -->
+          <div class="mb-4">
+            <label for="patientId" class="form-label">Select Patient *</label>
+            <select id="patientId" name="patientId" class="form-control" required>
+              <option value="">-- Select Patient --</option>
+              <% patients.forEach(patient => { %>
+                <option value="<%= patient._id %>">
+                  <%= patient.registrationNo %> - <%= patient.name %>
+                </option>
+              <% }) %>
+            </select>
+          </div>
+
+          <!-- Visit Number -->
+          <div class="mb-4">
+            <label for="visitNumber" class="form-label">Visit Number</label>
+            <input type="number" id="visitNumber" name="visitNumber" class="form-control" readonly value="1"/>
+          </div>
+
+          <!-- Goiter -->
+          <div class="mb-4">
+            <label class="form-label">Goiter *</label>
+            <select name="goiter" class="form-select" required>
+              <option value="">-- Select --</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+
+          <!-- Diagnosis and Medication Sections -->
+          <div class="row">
+            <div class="col-md-6">
+              <!-- Diagnosis -->
+              <div class="mb-4">
+                <label class="form-label">Current Diagnosis *</label>
+                <div class="row">
+                  <% const diagnoses = [
+                    "Hypothyroidism", "Hyperthyroidism", "Thyroiditis",
+                    "Nodular Goiter", "Subclinical Hyperthyroidism",
+                    "Subclinical Hypothyroidism"
+                  ]; %>
+                  <% diagnoses.forEach((item, index) => { %>
+                    <div class="col-md-6">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="currentDiagnosis[]" value="<%= item %>" id="diag<%= index %>">
+                        <label class="form-check-label" for="diag<%= index %>"><%= item %></label>
+                      </div>
+                    </div>
+                  <% }) %>
+                </div>
+                <textarea class="form-control mt-2" name="customDiagnosis" rows="1" placeholder="Add custom diagnosis if any..."></textarea>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <!-- Medication -->
+              <div class="mb-4">
+                <label class="form-label">Current Medication *</label>
+                <div class="row">
+                  <% const medications = [
+                    "Thyroxine 12.5 mcg", "Thyroxine 25 mcg", "Thyroxine 50 mcg",
+                    "Thyronorm 62.5 mcg", "Thyronorm 88 mcg",
+                    "Thyronorm 100 mcg", "Thyronorm 125 mcg", "Methimazole 10 mg"
+                  ]; %>
+                  <% medications.forEach((item, index) => { %>
+                    <div class="col-md-6">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="currentMedication[]" value="<%= item %>" id="med<%= index %>">
+                        <label class="form-check-label" for="med<%= index %>"><%= item %></label>
+                      </div>
+                    </div>
+                  <% }) %>
+                </div>
+                <textarea class="form-control mt-2" name="customMedication" rows="1" placeholder="Add custom medication if any..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Physical Measurements -->
+          <h5 class="mt-4 mb-3">Physical Measurements</h5>
+          <div class="row">
+            <div class="col-md-3">
+              <label for="height" class="form-label">Height (cm) *</label>
+              <input type="number" class="form-control" id="height" name="height" step="0.1" min="0" required>
+            </div>
+            <div class="col-md-3">
+              <label for="weight" class="form-label">Weight (kg) *</label>
+              <input type="number" class="form-control" id="weight" name="weight" step="0.1" min="0" required>
+            </div>
+            <div class="col-md-3">
+              <label for="bmi" class="form-label">BMI</label>
+              <input type="number" class="form-control" id="bmi" name="bmi" step="0.1" min="0" readonly>
+            </div>
+            <div class="col-md-3">
+              <label for="bpUpper" class="form-label">Diastolic BP *</label>
+              <input type="number" class="form-control" id="bpUpper" name="bpUpper" min="0" required>
+            </div>
+            <div class="col-md-3">
+              <label for="bpLower" class="form-label">Systolic BP *</label>
+              <input type="number" class="form-control" id="bpLower" name="bpLower" min="0" required>
+            </div>
+          </div>
+
+          <!-- Thyroid Levels -->
+          <h5 class="mt-4 mb-3">Thyroid Levels</h5>
+          <div class="row">
+            <div class="col-md-3">
+              <label for="ft3" class="form-label">FT3 Level *</label>
+              <input type="number" class="form-control" id="ft3" name="ft3" step="0.01" min="0" required>
+              <div class="form-text">Normal range: 2.3–4.2</div>
+            </div>
+            <div class="col-md-3">
+              <label for="ft4" class="form-label">FT4 Level *</label>
+              <input type="number" class="form-control" id="ft4" name="ft4" step="0.01" min="0" required>
+              <div class="form-text">Normal range: 5.0–12.0</div>
+            </div>
+            <div class="col-md-3">
+              <label for="t3" class="form-label">T3 Level *</label>
+              <input type="number" class="form-control" id="t3" name="t3" step="0.01" min="0" required>
+              <div class="form-text">Normal range: (Add correct range)</div>
+            </div>
+            <div class="col-md-3">
+              <label for="tsh" class="form-label">TSH Level *</label>
+              <input type="number" class="form-control" id="tsh" name="tsh" step="0.01" min="0" required>
+              <div class="form-text">Normal range: 0.4–4.0</div>
+            </div>
+            <div class="col-md-3">
+              <label for="tpo" class="form-label">TPO Level *</label>
+              <input type="number" class="form-control" id="tpo" name="tpo" step="0.01" min="0" required>
+              <div class="form-text">Normal range: 0.4–4.0</div>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+            <a href="/home" class="btn btn-secondary me-md-2">Cancel</a>
+            <button type="submit" class="btn btn-success">Save Diagnosis</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Auto-fetch visit number
+    document.getElementById('patientId').addEventListener('change', async function () {
+      const patientId = this.value;
+      if (!patientId) return;
+      try {
+        const res = await fetch(`/api/visits/${patientId}`);
+        const data = await res.json();
+        document.getElementById('visitNumber').value = (data?.totalVisits || 0) + 1;
+      } catch (err) {
+        console.error('Visit fetch error:', err);
+        document.getElementById('visitNumber').value = 1;
+      }
+    });
+
+    // Auto BMI calculation
+    document.getElementById('height').addEventListener('input', calculateBMI);
+    document.getElementById('weight').addEventListener('input', calculateBMI);
+
+    function calculateBMI() {
+      const height = parseFloat(document.getElementById('height').value);
+      const weight = parseFloat(document.getElementById('weight').value);
+      if (height > 0 && weight > 0) {
+        const bmi = weight / ((height / 100) ** 2);
+        document.getElementById('bmi').value = bmi.toFixed(2);
+      } else {
+        document.getElementById('bmi').value = '';
+      }
+    }
+  </script>
+</body>
+</html>

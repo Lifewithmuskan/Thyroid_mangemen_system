@@ -1,0 +1,39 @@
+{
+  "name": "thyroid-management-system",
+  "version": "1.0.0",
+  "description": "A comprehensive thyroid department management system",
+  "main": "main.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node main.js",
+    "dev": "nodemon main.js",
+    "build": "echo 'Build completed'",
+    "test": "echo 'No tests specified'"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "helmet": "^7.0.0",
+    "mongoose": "^7.8.7",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "keywords": [
+    "thyroid",
+    "hospital",
+    "management",
+    "nodejs",
+    "express",
+    "mongodb"
+  ],
+  "author": "Hospital Admin",
+  "license": "MIT"
+}

@@ -1,0 +1,85 @@
+/* Layout */
+#wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  min-width: 220px;
+  max-width: 220px;
+  height: 100vh;
+  background-color: #1e1e2f;
+  padding-top: 20px;
+  position: fixed;
+}
+
+.sidebar .list-group-item {
+  border: none;
+  font-weight: 500;
+}
+
+.sidebar .list-group-item:hover {
+  background-color: #2c2c3a;
+}
+
+/* Page content */
+#page-content-wrapper {
+  margin-left: 220px;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+/* Cards */
+.card {
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card .card-body {
+  padding: 1.5rem;
+}
+
+/* Navbar */
+.navbar {
+  padding: 1rem 2rem;
+}
+
+/* Typography */
+h4, h5 {
+  font-weight: 600;
+}
+
+/* Button style */
+.btn {
+  border-radius: 6px;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+  #page-content-wrapper {
+    margin-left: 0;
+  }
+}
+
+/* Optional: Scroll styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

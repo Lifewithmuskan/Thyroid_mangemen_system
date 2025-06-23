@@ -1,0 +1,52 @@
+/* Print styles for reports */
+@media print {
+  .navbar,
+  .btn,
+  .no-print {
+    display: none !important;
+  }
+
+  .card {
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+  }
+
+  .card-header {
+    background-color: #f8f9fa !important;
+    color: #000 !important;
+  }
+
+  .table {
+    font-size: 12px;
+  }
+
+  .badge {
+    border: 1px solid #000;
+    background-color: transparent !important;
+    color: #000 !important;
+  }
+
+  body {
+    background-color: white !important;
+  }
+
+  .container {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+/* Print button styles */
+.print-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+@media print {
+  .print-btn {
+    display: none;
+  }
+}
