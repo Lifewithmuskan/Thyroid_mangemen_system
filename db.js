@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/thyroid_management"
+// const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/thyroid_management"
+const MONGODB_URI = "mongodb+srv://singh112002muskan:4tmi6xm99bOyxSjh@cluster0.ltxq9be.mongodb.net/thyroid_management?retryWrites=true&w=majority&appName=Cluster0";
 
 // MongoDB connection
 const connectDB = async () => {
