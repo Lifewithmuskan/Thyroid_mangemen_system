@@ -82,49 +82,47 @@
                                  
                                 </tr>
                             </thead>
-                            <tbody>
-                                <% medicalRecords.forEach((record, index) => { %>
-                                           
-           
-                                    <tr>
-                                        <td><%= index + 1 %></td>
-                                        <td><%= new Date(record.dateRecorded).toLocaleDateString() %></td>
-                                        <td><%= record.patient.name %></td>
-                                        <td><%= record.patient.age %></td>
-                                        <td>
-                                            <span class="text-truncate d-inline-block" style="max-width: 150px;" title="<%= record.currentDiagnosis %>">
-                                                <%= record.currentDiagnosis %>
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <% if (record.thyroidType === 'Normal') { %>
-                                                <span class="badge bg-success"><%= record.thyroidType %></span>
-                                            <% } else if (record.thyroidType === 'Hypothyroid') { %>
-                                                <span class="badge bg-warning"><%= record.thyroidType %></span>
-                                            <% } else if (record.thyroidType === 'Hyperthyroid') { %>
-                                                <span class="badge bg-danger"><%= record.thyroidType %></span>
-                                            <% } %>
-                                        </td>
-                                        <td>            <%=record.goiter %></td>
-                                        <td>
-                                            <small>
-                                                T3: <%= record.thyroidLevels.ft3 %><br>
-                                                T4: <%= record.thyroidLevels.ft4 %><br>
-                                                TSH: <%= record.thyroidLevels.tsh %>
-                                            </small>
-                                        </td>
-                                        <td><%= record.bloodPressure.systolic  %>/<%= record.bloodPressure.diastolic %></td>
-                                        <td>
-                                            <% 
-                                                const heightInM = record.height / 100;
-                                                const bmi = (record.weight / (heightInM * heightInM)).toFixed(1);
-                                            %>
-                                            <%= bmi %>
-                                        </td>
-                            
-                                    </tr>
-                                <% }) %>
-                            </tbody>
+                         <tbody>
+  <% medicalRecords.forEach((record, index) => { %>
+    <tr>
+      <td><%= index + 1 %></td>
+      <td><%= new Date(record.dateRecorded).toLocaleDateString() %></td>
+      <td><%= record.patient ? record.patient.name : 'N/A' %></td>
+      <td><%= record.patient ? record.patient.age : 'N/A' %></td>
+      <td>
+        <span class="text-truncate d-inline-block" style="max-width: 150px;" title="<%= record.currentDiagnosis %>">
+          <%= record.currentDiagnosis %>
+        </span>
+      </td>
+      <td>
+        <% if (record.thyroidType === 'Normal') { %>
+          <span class="badge bg-success"><%= record.thyroidType %></span>
+        <% } else if (record.thyroidType === 'Hypothyroid') { %>
+          <span class="badge bg-warning"><%= record.thyroidType %></span>
+        <% } else if (record.thyroidType === 'Hyperthyroid') { %>
+          <span class="badge bg-danger"><%= record.thyroidType %></span>
+        <% } %>
+      </td>
+      <td><%= record.goiter %></td>
+      <td>
+        <small>
+          T3: <%= record.thyroidLevels.ft3 %><br>
+          T4: <%= record.thyroidLevels.ft4 %><br>
+          TSH: <%= record.thyroidLevels.tsh %>
+        </small>
+      </td>
+      <td><%= record.bloodPressure.systolic %>/<%= record.bloodPressure.diastolic %></td>
+      <td>
+        <% 
+          const heightInM = record.height / 100;
+          const bmi = (record.weight / (heightInM * heightInM)).toFixed(1);
+        %>
+        <%= bmi %>
+      </td>
+    </tr>
+  <% }) %>
+</tbody>
+
                         </table>
                     </div>
 
