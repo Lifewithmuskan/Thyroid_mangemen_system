@@ -89,28 +89,97 @@ app.get("/", (req, res) => {
   res.render("auth", { error: null })
 })
 
+// app.post("/login", async (req, res) => {
+//   const { username, password } = req.body
+
+//   try {
+//     // Check hardcoded admin first
+//     if (username === "admin" && password === "admin123") {
+//       req.session.adminId = "hardcoded-admin"
+//       return res.redirect("/home")
+//     }
+
+//     // Check database admins
+//     const admin = await Admin.findOne({ username })
+//     if (admin && (await bcrypt.compare(password, admin.password))) {
+//       req.session.adminId = admin._id
+//       return res.redirect("/home")
+//     }
+
+//     res.render("auth", { error: "Invalid credentials" })
+//   } catch (error) {
+//     res.render("auth", { error: "Login failed" })
+//   }
+// })
+// app.post("/login", async (req, res) => {
+//   const { username, password } = req.body;
+
+//   try {
+//     // Check hardcoded admin
+//     if (username === "admin" && password === "admin123") {
+//       req.session.adminId = "hardcoded-admin";
+//       return res.redirect("/home");
+//     }
+
+//     // Check hardcoded "registration" user
+//     if (username === "registration" && password === "reg1234") {
+//       req.session.registrationUser = true;
+//       return res.redirect("/register");
+//     }
+
+//     // Check database admins
+//     const admin = await Admin.findOne({ username });
+//     if (admin && (await bcrypt.compare(password, admin.password))) {
+//       req.session.adminId = admin._id;
+//       return res.redirect("/home");
+//     }
+
+//     res.render("auth", { error: "Invalid credentials" });
+//   } catch (error) {
+//     res.render("auth", { error: "Login failed" });
+//   }
+// });
+
+
 app.post("/login", async (req, res) => {
-  const { username, password } = req.body
+  const { username, password } = req.body;
 
   try {
-    // Check hardcoded admin first
+    // Hardcoded admin
     if (username === "admin" && password === "admin123") {
-      req.session.adminId = "hardcoded-admin"
-      return res.redirect("/home")
+      req.session.adminId = "hardcoded-admin";
+      return res.redirect("/home");
     }
 
-    // Check database admins
-    const admin = await Admin.findOne({ username })
+    // Hardcoded registration user
+    if (username === "registration" && password === "reg1234") {
+      req.session.registrationUser = true;
+      return res.redirect("/register");
+    }
+
+    // Hardcoded desk user
+    if (username === "desk" && password === "desk1234") {
+      req.session.deskUser = true;
+      return res.redirect("/home");
+    }
+
+    // Check database admin
+    const admin = await Admin.findOne({ username });
     if (admin && (await bcrypt.compare(password, admin.password))) {
-      req.session.adminId = admin._id
-      return res.redirect("/home")
+      req.session.adminId = admin._id;
+      return res.redirect("/home");
     }
 
-    res.render("auth", { error: "Invalid credentials" })
+    res.render("auth", { error: "Invalid credentials" });
   } catch (error) {
-    res.render("auth", { error: "Login failed" })
+    res.render("auth", { error: "Login failed" });
   }
-})
+});
+
+app.use((req, res, next) => {
+  res.locals.session = req.session;
+  next();
+});
 
 app.post("/signup", async (req, res) => {
   const { username, password, confirmPassword } = req.body
@@ -138,8 +207,9 @@ app.post("/signup", async (req, res) => {
 
 // 2. Home Dashboard
 app.get("/home", requireAuth, (req, res) => {
-  res.render("home")
-})
+  res.render("home", { session: req.session });
+});
+
 
 // Example: in routes/diagnosis.js or directly in app.js
 
@@ -1003,6 +1073,12 @@ app.get("/history", requireAuth, async (req, res) => {
     })
   }
 })
+app.get("/user", async (req, res) => {
+  const patients = await Patient.find();
+  res.render("user", {
+    patients,
+  });
+});
 
 // Logout
 app.post("/logout", (req, res) => {

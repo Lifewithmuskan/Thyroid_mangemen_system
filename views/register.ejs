@@ -83,11 +83,14 @@
     <h4>🏥 Thyroid Dept</h4>
     <hr style="border-color: white;">
     <ul class="nav flex-column">
-      <li class="nav-item"><a class="nav-link text-white" href="/home">Dashboard</a></li>
+      <!-- <li class="nav-item"><a class="nav-link text-white" href="/home">Dashboard</a></li> -->
       <li class="nav-item"><a class="nav-link text-white" href="/register">Register Patient</a></li>
-      <li class="nav-item"><a class="nav-link text-white" href="/patients">All Patients</a></li>
-      <li class="nav-item"><a class="nav-link text-white" href="/logout">Logout</a></li>
+      <li class="nav-item"><a class="nav-link text-white" href="/user">All Patients</a></li>
+      
     </ul>
+    <form action="/logout" method="POST">
+    <button class="btn btn-light btn-sm w-100" type="submit">Logout</button>
+  </form>
   </div>
 
   <!-- Main Content -->
